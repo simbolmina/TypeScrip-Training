@@ -1,0 +1,57 @@
+//refactor 4 = we created a class which container file reader
+// import fs from "fs";
+// import { CvsFileReader } from "./CvsFileReader";
+//refacot 6 = import MatchResult from other file
+import { MatchResult } from "./MatchResult";
+import { MatchReader } from "./MatchReader";
+
+//deleted after refactor 4;
+// const matches = fs
+//   .readFileSync("football.csv", {
+//     encoding: "utf-8",
+//   })
+//   .split("\n")
+//   .map((line: string): string[] => line.split(","));
+
+// const reader = new CvsFileReader("football.csv");
+const reader = new MatchReader("football.csv");
+reader.read();
+
+let manUnitedWins = 0;
+//refactor 1 for claritifaction of variables;
+
+// const howWin = "H";
+// const awayWin = "A";
+
+//refactor 2
+
+// const MatchResult = {
+//   HomeWin: "H",
+//   AwayWin: "A",
+//   Draw: "D",
+// };
+
+//refactor 3; enum = enumeration;
+// enum says this is a collection very closly related data
+// enum MatchResult {
+//   HomeWin = "H",
+//   AwayWin = "A",
+//   Draw = "D",
+// }
+
+for (let match of reader.data) {
+  //refactor 4; added reader class
+  // for (let match of matches) {
+  //refactor 1/2 added variables to be understanding
+  // if (match[1] === "Man United" && match[5] === "H") {
+  // if (match[1] === "Man United" && match[5] === howWin) {
+  if (match[1] === "Man United" && match[5] === MatchResult.HomeWin) {
+    manUnitedWins++;
+    // } else if (match[2] === "Man United" && match[5] === "A") {
+    // } else if (match[2] === "Man United" && match[5] === awayWin) {
+  } else if (match[2] === "Man United" && match[5] === MatchResult.AwayWin) {
+    manUnitedWins++;
+  }
+}
+
+console.log(`Man United Wins: ${manUnitedWins}`);
