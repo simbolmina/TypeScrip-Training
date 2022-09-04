@@ -1,7 +1,8 @@
-import { AxiosResponse } from "axios";
-import { Eventing } from "./Eventing";
-import { Sync } from "./Sync";
+import { Model } from "./Model";
 import { Attributes } from "./Attributes";
+import { ApiSync } from "./ApiSync";
+import { Eventing } from "./Eventing";
+import { Collection } from "./Collection";
 
 export interface UserProps {
   //! properties are optional with ?
@@ -12,57 +13,27 @@ export interface UserProps {
 
 const rootUrl: string = "http://localhost:3000/users";
 
-export class User {
-  public events: Eventing = new Eventing();
-  public sync: Sync<UserProps> = new Sync<UserProps>(rootUrl);
-  public attributes: Attributes<UserProps>;
-
-  constructor(attrs: UserProps) {
-    this.attributes = new Attributes<UserProps>(attrs);
+export class User extends Model<UserProps> {
+  static buildUser(attrs: UserProps): User {
+    return new User(
+      new Attributes<UserProps>(attrs),
+      new Eventing(),
+      new ApiSync<UserProps>(rootUrl)
+    );
   }
 
-  //! We created functions in separete classes and added them here with code up here but since we want to functions should work together and transfer data from each other and client should use this class user.fetch() instead of user.eventing.fetch() we created following functions here as well.
-
-  get on() {
-    return this.events.on;
-    //? dont invoke function here!
-    //* This will return on() function from eventing.ts and we wont have to use user.events.on(). instead user.on() will be enough and whenever we update eventing.ts this function will be updated as well.
+  static buildUserCollection(): Collection<User, UserProps> {
+    return new Collection<User, UserProps>(rootUrl, (json: UserProps) =>
+      User.buildUser(json)
+    );
   }
 
-  get trigger() {
-    return this.events.trigger;
-  }
+  // isAdminUser(): boolean {
+  //   return this.get("id") === 1;
+  // }
 
-  get get() {
-    return this.attributes.get;
-  }
-
-  set(update: UserProps): void {
-    this.attributes.set(update);
-    this.events.trigger("change");
-  }
-
-  fetch(): void {
-    // const id = this.attributes.get("id");
-    const id = this.get("id");
-    if (typeof id !== "number") {
-      throw new Error("Cannot fetch user without id");
-    }
-
-    this.sync.fetch(id).then((res: AxiosResponse): void => {
-      // this.attributes.set(res.data);
-      this.set(res.data);
-    });
-  }
-
-  save(): void {
-    this.sync
-      .save(this.attributes.getAll())
-      .then((res: AxiosResponse): void => {
-        this.trigger("save");
-      })
-      .catch(() => {
-        this.trigger("error");
-      });
+  setRandomAge(): void {
+    const age = Math.round(Math.random() * 100);
+    this.set({ age });
   }
 }

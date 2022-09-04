@@ -1,0 +1,33 @@
+// import { User } from "./models/User";
+// import { User, UserProps } from "./models/User";
+// import axios, { AxiosResponse } from "axios";
+// import { Collection } from "./models/Collection";
+
+// const user = new User({ id: 1, name: "bilal2", age: 122 });
+
+// const user = User.buildUser({ id: 1 });
+
+// user.on("change", () => {
+//   console.log(user);
+//   return "test"; // should not be like this...
+// });
+
+// user.fetch();
+// console.log(user.isAdminUser());
+
+// axios.get("http://localhost:3000/users").then((response: AxiosResponse) => {
+//   console.log(response.data);
+// });
+
+// const collection = new Collection<User, UserProps>(
+//   "http://localhost:3000/users",
+//   (json: UserProps) => User.buildUser(json)
+// );
+
+// const collection = User.buildUserCollection();
+
+// collection.on("change", () => {
+//   console.log(collection);
+// });
+
+// collection.fetch();

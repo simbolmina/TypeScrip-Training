@@ -5,7 +5,7 @@ interface HasId {
   id?: number;
 }
 
-export class Sync<T extends HasId> {
+export class ApiSync<T extends HasId> {
   //* we tell the class that generic identifier T has a id property which is shown in HasId interface.
   constructor(public rootUrl: string) {}
 
