@@ -1,6 +1,7 @@
 // import Parent from "./props/Parent";
 // import GuestList from "./state/GuestLıst";
-import UserSearch from "./state/UserSearch";
+import UserSearch from "./refs/UserSearch";
+// import EventComponent from "./events/EventComponent";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       {/* <GuestList /> */}
       <UserSearch />
       {/* <Parent /> */}
+      {/* <EventComponent /> */}
     </div>
   );
 }
